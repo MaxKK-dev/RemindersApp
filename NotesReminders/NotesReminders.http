@@ -1,0 +1,6 @@
+@NotesReminders_HostAddress = http://localhost:5213
+
+GET {{NotesReminders_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
