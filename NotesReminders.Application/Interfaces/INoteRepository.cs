@@ -5,9 +5,10 @@ namespace NotesReminders.Application.Interfaces;
 public interface INoteRepository
 {
     Task<IEnumerable<Note>> GetAllAsync(int userId);
+    Task<IEnumerable<Note>> GetAllDeletedAsync(int userId);
     Task<Note?> GetNoteByIdAsync(int id, int userId);
-    Task<Note> CreateAsync(Note note);
-    Task<Note?> UpdateAsync(Note note);
+    Task<Note?> GetDeletedNoteByIdAsync(int id, int userId);
+    Task<Note> AddAsync(Note note);
+    void RemoveNote(Note note);
     Task SaveChangesAsync();
-    Task<bool> DeleteAsync(int id, int userId);
 }
