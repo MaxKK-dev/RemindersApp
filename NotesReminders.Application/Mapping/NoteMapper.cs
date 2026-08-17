@@ -12,9 +12,9 @@ public static class NoteMapper
             note.Title,
             note.Content,
             note.CreatedAt,
-            note.ReminderTime,
             note.UpdatedAt,
-            note.IsCompleted);
+            note.IsCompleted,
+            note.Reminders.Select(n => n.ToResponseDto()).ToList());
     }
     public static DeletedNoteResponseDto ToDeletedResponseDto(this Note note)
     {
@@ -23,9 +23,10 @@ public static class NoteMapper
             note.Title,
             note.Content,
             note.CreatedAt,
-            note.ReminderTime,
             note.UpdatedAt,
             note.DeletedAt ?? throw new InvalidOperationException("Deleted note must have a deletion date."),
-            note.IsCompleted);
+            note.IsCompleted,
+            note.Reminders.Select(n => n.ToResponseDto()).ToList()
+            );
     }
 }

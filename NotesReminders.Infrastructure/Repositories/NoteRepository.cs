@@ -19,29 +19,28 @@ public class NoteRepository : INoteRepository
 
     public async Task<IEnumerable<Note>> GetAllAsync(int userId)
     {
-        return await _notes
+        return await _notes.Include(n => n.Reminders)
             .Where(n => n.UserId == userId && n.DeletedAt == null)
             .ToListAsync();
     }
     public async Task<IEnumerable<Note>> GetAllDeletedAsync(int userId)
     {
-        return await _notes.Where(n => n.UserId == userId && n.DeletedAt != null).ToListAsync();
+        return await _notes.Include(n => n.Reminders).Where(n => n.UserId == userId && n.DeletedAt != null).ToListAsync();
     }
 
     public async Task<Note?> GetNoteByIdAsync(int id, int userId)
     {
-        return await _notes
+        return await _notes.Include(n => n.Reminders)
             .FirstOrDefaultAsync(n => n.UserId == userId && n.Id == id && n.DeletedAt == null);
     }
     public async Task<Note?> GetDeletedNoteByIdAsync(int id, int userId)
     {
-        return await _notes
+        return await _notes.Include(n => n.Reminders)
             .FirstOrDefaultAsync(n => n.UserId == userId && n.Id == id && n.DeletedAt != null);
     }
-    public async Task<Note> AddAsync(Note note)
+    public async Task AddAsync(Note note)
     {
         await _notes.AddAsync(note);
-        return note;
     }
     public void RemoveNote(Note note)
     {

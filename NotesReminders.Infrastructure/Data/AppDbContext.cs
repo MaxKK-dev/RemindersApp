@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users {get; set; }
     public DbSet<Note> Notes {get; set; }
+    public DbSet<Reminder> Reminders {get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

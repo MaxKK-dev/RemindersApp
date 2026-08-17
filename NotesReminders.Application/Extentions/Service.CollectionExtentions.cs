@@ -12,6 +12,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<INoteService, NoteService>();
+        services.AddScoped<IReminderProcessor, ReminderProcessor>();
+
 
         return services;
     }

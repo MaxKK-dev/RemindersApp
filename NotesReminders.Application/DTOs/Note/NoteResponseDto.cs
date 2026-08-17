@@ -1,3 +1,5 @@
+using NotesReminders.Domain.Entities;
+using NotesReminders.Application.DTOs.Reminder;
 
 namespace NotesReminders.Application.DTOs.Note;
 
@@ -6,8 +8,8 @@ public record NoteResponseDto(
     string Title,
     string Content,
     DateTime CreatedAt,
-    DateTime? ReminderTime,
     DateTime? UpdatedAt,
-    bool IsComlete
+    bool IsComlete,
+    ICollection<ReminderResponseDto> Reminders
 
 );

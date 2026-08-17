@@ -11,6 +11,7 @@ using NotesReminders.Infrastructure.Security;
 using NotesReminders.Infrastructure.Repositories;
 using NotesReminders.Application.Interfaces;
 using NotesReminders.Domain.Entities;
+using NotesReminders.Infrastructure.Notification;
 
 
 namespace NotesReminders.Infrastructure.Extensions;
@@ -22,6 +23,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddDatabase(configuration);
         services.AddRepositories();
+        services.AddNotifications();
         services.AddSecurity(configuration);
 
         return services;
@@ -40,6 +42,13 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<INoteRepository, NoteRepository>();
+        services.AddScoped<IReminderRepository, ReminderRepository>();
+
+        return services;
+    }
+    private static IServiceCollection AddNotifications(this IServiceCollection services)
+    {
+        services.AddScoped<INotificationService, ConsoleNotificationService>();
 
         return services;
     }

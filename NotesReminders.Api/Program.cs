@@ -1,5 +1,6 @@
 using NotesReminders.Infrastructure.Extensions;
 using NotesReminders.Application.Extensions;
+using NotesReminders.Infrastructure.BackgroundServices;
 using NotesReminders.Api.Middleware;
 
 
@@ -9,7 +10,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddOpenApi();
+//builder.Services.AddOpenApi();
+
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -17,11 +20,15 @@ builder.Services.AddProblemDetails();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
+builder.Services.AddHostedService<ReminderBackgroundService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    //app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseExceptionHandler();

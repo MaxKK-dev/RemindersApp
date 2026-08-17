@@ -1,4 +1,5 @@
 using NotesReminders.Application.DTOs.Note;
+using NotesReminders.Application.DTOs.Reminder;
 
 namespace NotesReminders.Application.Interfaces;
 
@@ -18,4 +19,9 @@ public interface INoteService
     Task<NoteResponseDto> CompleteAsync(int id, int userId);
     Task<NoteResponseDto> UnCompleteAsync(int id, int userId);
     Task HardDeleteAsync (int id, int userId);
+    Task<ReminderResponseDto> AddReminderAsync(int noteId, CreateReminderRequestDto request, int userId);
+
+    Task<ReminderResponseDto> UpdateReminderAsync(int noteId, int reminderId, UpdateReminderRequestDto request, int userId);
+
+    Task DeleteReminderAsync(int noteId, int reminderId, int userId);
 }

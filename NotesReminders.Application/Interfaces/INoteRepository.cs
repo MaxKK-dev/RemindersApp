@@ -8,7 +8,7 @@ public interface INoteRepository
     Task<IEnumerable<Note>> GetAllDeletedAsync(int userId);
     Task<Note?> GetNoteByIdAsync(int id, int userId);
     Task<Note?> GetDeletedNoteByIdAsync(int id, int userId);
-    Task<Note> AddAsync(Note note);
+    Task AddAsync(Note note);
     void RemoveNote(Note note);
     Task SaveChangesAsync();
 }

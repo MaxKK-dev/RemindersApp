@@ -1,3 +1,4 @@
+using NotesReminders.Application.DTOs.Reminder;
 
 namespace NotesReminders.Application.DTOs.Note;
 
@@ -6,9 +7,10 @@ public record DeletedNoteResponseDto(
     string Title,
     string Content,
     DateTime CreatedAt,
-    DateTime? ReminderTime,
     DateTime? UpdatedAt,
     DateTime DeletedAt,
-    bool IsComlete
+    bool IsComlete,
+    ICollection<ReminderResponseDto> Reminders
+
 
 );
