@@ -1,5 +1,4 @@
 using NotesReminders.Application.Interfaces;
-using NotesReminders.Infrastructure.Notification;
 
 namespace NotesReminders.Application.Services;
 

@@ -1,6 +1,6 @@
 using NotesReminders.Domain.Entities;
 
-namespace NotesReminders.Infrastructure.Notification;
+namespace NotesReminders.Application.Interfaces;
 
 public interface INotificationService
 {
