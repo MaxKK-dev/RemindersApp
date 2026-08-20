@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NotesReminders.Application.DTOs.Reminder;
+namespace NotesReminders.Desktop.DTOs.Reminder;
 
 public record UpdateReminderRequestDto
-{
+(
     [property: Required, DataType(DataType.DateTime)]
-    public DateTime NotifyAt {get; set; }
-}
+    DateTime NotifyAt
+);

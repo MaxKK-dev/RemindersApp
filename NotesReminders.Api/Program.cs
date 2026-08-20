@@ -10,9 +10,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
-//builder.Services.AddOpenApi();
+builder.Services.AddOpenApi();
 
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -26,9 +26,9 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    //app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 
 app.UseExceptionHandler();

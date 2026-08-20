@@ -2,11 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NotesReminders.Application.DTOs.Note;
 
-public record UpdateNoteRequestDto(
+public record UpdateNoteRequestDto
+{
     [property: Required, StringLength(50, MinimumLength = 3)]
-    string Title,
+    public string Title {get; set; } = string.Empty;
     [property: StringLength(200)]
-    string Content,
-    [property: DataType(DataType.DateTime)]
-    DateTime? ReminderTime
-);
+    public string Content {get; set; } = string.Empty;
+}

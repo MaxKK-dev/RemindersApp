@@ -1,10 +1,13 @@
- using System.ComponentModel.DataAnnotations;
- 
- namespace NotesReminders.Application.DTOs.Note;
+using System.ComponentModel.DataAnnotations;
 
- public record CreateNoteRequestDto(
-    [property: Required, StringLength(50, MinimumLength = 3)]
-    string Title,
-    [property: StringLength(200)]
-    string Content
- );
+namespace NotesReminders.Application.DTOs.Note;
+
+public record CreateNoteRequestDto
+{
+    [Required]
+    [StringLength(50, MinimumLength = 3)]
+    public string Title { get; init; } = string.Empty;
+
+    [StringLength(200)]
+    public string Content { get; init; } = string.Empty;
+}

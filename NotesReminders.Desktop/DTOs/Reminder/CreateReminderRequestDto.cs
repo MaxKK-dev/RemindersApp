@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NotesReminders.Application.DTOs.Reminder;
+namespace NotesReminders.Desktop.DTOs.Reminder;
 
 public record CreateReminderRequestDto
-{
+(
     [property: Required]
-    public int NoteId {get; set; }
+    int NoteId,
     [property: Required, DataType(DataType.DateTime)]
-    public DateTime NotifyAt {get; set; }
-}
+    DateTime NotifyAt
+);

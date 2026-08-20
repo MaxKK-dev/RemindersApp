@@ -1,0 +1,221 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:NotesReminders.Desktop.ViewModels.Notes"
+    xmlns:reminderVm="using:NotesReminders.Desktop.ViewModels.Notes"
+    x:Class="NotesReminders.Desktop.Views.Notes.NotesView"
+    x:DataType="vm:NotesViewModel"
+    x:Name="Root">
+
+    <ScrollViewer>
+
+        <StackPanel
+            Margin="20"
+            Spacing="10">
+
+            <Button
+                Content="+ New Note"
+                Command="{Binding NewNoteCommand}" />
+
+            <!-- CREATE NOTE -->
+
+            <StackPanel
+                IsVisible="{Binding IsCreatingNote}"
+                Spacing="8">
+
+                <TextBlock
+                    Text="Title" />
+
+                <TextBox
+                    Text="{Binding Title}" />
+
+                <TextBlock
+                    Text="Content" />
+
+                <TextBox
+                    Text="{Binding Content}"
+                    Height="120"
+                    AcceptsReturn="True" />
+
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="10">
+
+                    <Button
+                        Content="Create"
+                        Command="{Binding CreateNoteCommand}" />
+
+                    <Button
+                        Content="Cancel"
+                        Command="{Binding CancelCreateCommand}" />
+
+                </StackPanel>
+
+            </StackPanel>
+
+            <!-- EDIT NOTE -->
+
+            <StackPanel
+                IsVisible="{Binding IsEditingNote}"
+                Spacing="8">
+
+                <TextBlock
+                    Text="Edit note" />
+
+                <TextBox
+                    Text="{Binding Title}" />
+
+                <TextBox
+                    Text="{Binding Content}"
+                    Height="120"
+                    AcceptsReturn="True" />
+
+                <!-- REMINDERS -->
+
+                <TextBlock
+                    Margin="0,10,0,0"
+                    FontWeight="Bold"
+                    Text="Reminders" />
+
+                <ItemsControl
+                    ItemsSource="{Binding ReminderItems}">
+
+                    <ItemsControl.ItemTemplate>
+
+                        <DataTemplate
+                            x:DataType="reminderVm:ReminderItemViewModel">
+
+                            <Border
+                                BorderThickness="1"
+                                Padding="8"
+                                Margin="0,3">
+
+                                <StackPanel
+                                    Spacing="6">
+
+                                    <StackPanel
+                                        Orientation="Horizontal"
+                                        Spacing="8">
+
+                                        <DatePicker
+                                            SelectedDate="{Binding Date, Mode=TwoWay}" />
+
+                                        <TimePicker
+                                            SelectedTime="{Binding Time, Mode=TwoWay}"
+                                            ClockIdentifier="24HourClock" />
+
+                                    </StackPanel>
+
+                                    <StackPanel
+                                        Orientation="Horizontal"
+                                        Spacing="8">
+
+                                        <Button
+                                            Content="Update"
+                                            Command="{Binding #Root.DataContext.UpdateReminderCommand}"
+                                            CommandParameter="{Binding}" />
+
+                                        <Button
+                                            Content="Delete"
+                                            Command="{Binding #Root.DataContext.DeleteReminderCommand}"
+                                            CommandParameter="{Binding}" />
+
+                                    </StackPanel>
+
+                                </StackPanel>
+
+                            </Border>
+
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+                <!-- ADD REMINDER -->
+
+                <TextBlock
+                    Margin="0,5,0,0"
+                    Text="Add reminder" />
+
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="8">
+
+                    <DatePicker
+                        SelectedDate="{Binding NewReminderDate}" />
+
+                    <TimePicker
+                        SelectedTime="{Binding NewReminderTime}"
+                        ClockIdentifier="24HourClock" />
+
+                    <Button
+                        Content="Add"
+                        Command="{Binding AddReminderCommand}" />
+
+                </StackPanel>
+
+                <!-- NOTE ACTIONS -->
+
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="10"
+                    Margin="0,10,0,0">
+
+                    <Button
+                        Content="Save"
+                        Command="{Binding SaveNoteCommand}" />
+
+                    <Button
+                        Content="Delete"
+                        Command="{Binding DeleteNoteCommand}" />
+
+                </StackPanel>
+
+            </StackPanel>
+
+            <TextBlock
+                Foreground="Red"
+                Text="{Binding ErrorMessage}" />
+
+            <!-- NOTES LIST -->
+
+            <ListBox
+                ItemsSource="{Binding Notes}"
+                SelectedItem="{Binding SelectedNote}">
+
+                <ListBox.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <Border
+                            BorderThickness="1"
+                            Padding="10"
+                            Margin="0,5">
+
+                            <StackPanel>
+
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    FontSize="18"
+                                    Text="{Binding Title}" />
+
+                                <TextBlock
+                                    Margin="0,5,0,0"
+                                    Text="{Binding Content}" />
+
+                            </StackPanel>
+
+                        </Border>
+
+                    </DataTemplate>
+
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</UserControl>

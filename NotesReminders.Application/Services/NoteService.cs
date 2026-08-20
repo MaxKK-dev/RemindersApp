@@ -110,7 +110,7 @@ public class NoteService : INoteService
     public async Task<ReminderResponseDto> AddReminderAsync(int noteId,
     CreateReminderRequestDto request, int userId)
     {
-        var note = GetExistingNoteAsync(noteId, userId);
+        var note = await GetExistingNoteAsync(noteId, userId);
 
         var reminder = new Reminder
         {

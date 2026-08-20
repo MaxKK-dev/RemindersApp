@@ -1,6 +1,9 @@
-﻿namespace NotesReminders.Desktop.ViewModels;
+using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace NotesReminders.Desktop.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    [ObservableProperty]
+    private ViewModelBase? currentViewModel;
 }
