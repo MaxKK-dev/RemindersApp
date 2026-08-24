@@ -1,8 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 using NotesReminders.Application.DTOs.Note;
 using NotesReminders.Domain.Entities;
+using NotesReminders.Infrastructure.Data;
 
 namespace NotesReminders.Tests.Integration;
 
@@ -56,9 +59,7 @@ public class NotesControllerTests :
         Assert.NotNull(notes);
         Assert.Single(notes);
 
-        Assert.Equal(
-            "User 1 note",
-            notes[0].Title);
+        Assert.Equal("User 1 note", notes[0].Title);
     }
 
     [Fact]
@@ -121,9 +122,7 @@ public class NotesControllerTests :
         var response =
             await client.GetAsync("/api/notes/1");
 
-        Assert.Equal(
-            HttpStatusCode.NotFound,
-            response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
     [Fact]
@@ -136,9 +135,7 @@ public class NotesControllerTests :
         var response =
             await client.GetAsync("/api/notes");
 
-        Assert.Equal(
-            HttpStatusCode.Unauthorized,
-            response.StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
     [Fact]
@@ -179,13 +176,9 @@ public class NotesControllerTests :
                 NoteResponseDto>();
 
         Assert.NotNull(note);
-        Assert.Equal(
-            "Created through API",
-            note.Title);
+        Assert.Equal("Created through API", note.Title);
 
-        Assert.Equal(
-            "Created by integration test",
-            note.Content);
+        Assert.Equal("Created by integration test", note.Content);
     }
 
     [Fact]
@@ -210,8 +203,96 @@ public class NotesControllerTests :
                 "/api/notes",
                 request);
 
-        Assert.Equal(
-            HttpStatusCode.BadRequest,
-            response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+    [Fact]
+    public async Task UpdateNote_WhenAuthenticated_UpdatesNote()
+    {
+        await _factory.ClearDatabaseAsync();
+
+        await _factory.SeedAsync(
+            new Note
+            {
+                Id = 1,
+                UserId = 1,
+                Title = "Old title",
+                Content = "Old content"
+            });
+
+        using var client = _factory.CreateClient();
+
+        client.DefaultRequestHeaders.Add(
+            "X-Test-User-Id",
+            "1");
+
+        var request = new UpdateNoteRequestDto
+        {
+            Title = "Updated title",
+            Content = "Updated content"
+        };
+
+        var response = await client.PutAsJsonAsync(
+            "/api/notes/1",
+            request);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        using var scope = _factory.Services.CreateScope();
+
+        var db = scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
+
+        var note = await db.Notes
+            .FirstAsync(x => x.Id == 1);
+
+        Assert.Equal("Updated title", note.Title);
+
+        Assert.Equal("Updated content", note.Content);
+
+        Assert.NotNull(note.UpdatedAt);
+    }
+    [Fact]
+    public async Task UpdateNote_WhenNoteBelongsToAnotherUser_ReturnsNotFound()
+    {
+        await _factory.ClearDatabaseAsync();
+
+        await _factory.SeedAsync(
+            new Note
+            {
+                Id = 1,
+                UserId = 2,
+                Title = "User 2 note",
+                Content = "Secret content"
+            });
+
+        using var client = _factory.CreateClient();
+
+        client.DefaultRequestHeaders.Add(
+            "X-Test-User-Id",
+            "1");
+
+        var request = new UpdateNoteRequestDto
+        {
+            Title = "Hacked title",
+            Content = "Hacked content"
+        };
+
+        var response = await client.PutAsJsonAsync(
+            "/api/notes/1",
+            request);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        using var scope = _factory.Services.CreateScope();
+
+        var db = scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
+
+        var note = await db.Notes
+            .FirstAsync(x => x.Id == 1);
+
+        Assert.Equal("User 2 note", note.Title);
+
+        Assert.Equal("Secret content", note.Content);
     }
 }
